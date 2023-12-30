@@ -4,6 +4,7 @@ package com.omarHussien.springbootToDoList.controllers;
 import java.time.Instant;
 import java.time.ZoneId;
 
+import com.omarHussien.springbootToDoList.repository.ToDoItemRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,15 +18,20 @@ import org.springframework.web.servlet.ModelAndView;
 
 @Controller
 public class ToDoItemController {
-
     private final Logger logger = LoggerFactory.getLogger(ToDoItemController.class);
+
+    @Autowired
+    ToDoItemRepository toDoItemRepository;
 
     @GetMapping("/")
     public ModelAndView index() {
         logger.info("request to GET index");
         ModelAndView modelAndView = new ModelAndView("index");
+        modelAndView.addObject("todoItems",toDoItemRepository.findAll());
         return modelAndView;
     }
+
+
 
 
 

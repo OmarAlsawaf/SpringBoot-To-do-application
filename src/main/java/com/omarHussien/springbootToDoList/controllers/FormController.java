@@ -29,6 +29,10 @@ public class FormController {
         model.addAttribute("todo",todoItem);
         return "updateTodoItem";
     }
+    @GetMapping("/create")
+    public String createTodo(){
+        return "createTodo";
+    }
 
 
 }

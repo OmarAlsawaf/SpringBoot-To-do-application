@@ -9,7 +9,6 @@ import java.time.Instant;
 
 @Entity
 @Table(name = "todo_item")
-@NoArgsConstructor
 public class ToDoItem {
 
     @Id
@@ -38,8 +37,13 @@ public class ToDoItem {
     @Setter
     private Instant completionTimeStamp;
 
-    public ToDoItem(String title) {
+    public ToDoItem(String title,String description) {
         this.title = title;
+        this.creationTimeStamp = Instant.now();
+        this.complete = false;
+    }
+
+    public ToDoItem() {
         this.creationTimeStamp = Instant.now();
         this.complete = false;
     }

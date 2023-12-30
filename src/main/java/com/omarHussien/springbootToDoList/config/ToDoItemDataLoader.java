@@ -26,8 +26,8 @@ public class ToDoItemDataLoader implements CommandLineRunner {
         //only generate data if database is empty
         if(toDoItemRepository.count() ==0){
             logger.info("generating seed data ....");
-            ToDoItem item1 = new ToDoItem("dummy task 1");
-            ToDoItem item2 = new ToDoItem("dummy task 2");
+            ToDoItem item1 = new ToDoItem("dummy task 1","task 1 desc");
+            ToDoItem item2 = new ToDoItem("dummy task 2","task 2 desc");
             toDoItemRepository.save(item1);
             toDoItemRepository.save(item2);
         }

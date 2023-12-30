@@ -6,6 +6,8 @@ import java.time.ZoneId;
 
 import com.omarHussien.springbootToDoList.model.ToDoItem;
 import com.omarHussien.springbootToDoList.repository.ToDoItemRepository;
+import com.omarHussien.springbootToDoList.service.TodoService;
+import com.omarHussien.springbootToDoList.service.TodoServiceImp;
 import jakarta.validation.Valid;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -13,10 +15,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
 @Controller
@@ -25,12 +24,14 @@ public class ToDoItemController {
 
     @Autowired
     ToDoItemRepository toDoItemRepository;
+    @Autowired
+    TodoService todoService;
 
     @GetMapping("/")
     public ModelAndView index() {
         logger.info("request to GET index");
         ModelAndView modelAndView = new ModelAndView("index");
-        modelAndView.addObject("todoItems",toDoItemRepository.findAll());
+        modelAndView.addObject("todoItems",todoService.getTodos());
         return modelAndView;
     }
 
@@ -40,26 +41,28 @@ public class ToDoItemController {
             toDoItem.setId(id);
             return "updateTodoItem";
         }
-        if(toDoItem.getComplete() == Boolean.FALSE){
-            toDoItem.setCompletionTimeStamp(null);
-        }
-        toDoItemRepository.save(toDoItem);
+        todoService.updateTodo(toDoItem);
         return "redirect:/";
     }
 
     @PostMapping("/complete/{id}")
     public String markAsComplete(@PathVariable long id){
-        ToDoItem todoItem = toDoItemRepository.findById(id).orElseThrow(()-> new IllegalArgumentException("To-Do item not found"));
-        todoItem.setCompletionTimeStamp(Instant.now());
-        todoItem.setComplete(Boolean.TRUE);
-        toDoItemRepository.save(todoItem);
+        todoService.markTodoAsCompleted(id);
         return "redirect:/";
     }
 
     @PostMapping("/delete/{id}")
     public String deleteTodo(@PathVariable long id){
-        ToDoItem todoItem = toDoItemRepository.findById(id).orElseThrow(()-> new IllegalArgumentException("To-Do item not found"));
-        toDoItemRepository.delete(todoItem);
+        todoService.deleteTodo(id);
+        return "redirect:/";
+    }
+
+    @PostMapping("/addTodo")
+    public String addTodo(@ModelAttribute @Valid ToDoItem toDoItem,BindingResult result){
+        if(result.hasErrors()){
+            return "createTodo";
+        }
+        todoService.addTodo(toDoItem);
         return "redirect:/";
     }
 

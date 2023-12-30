@@ -61,30 +61,34 @@
     <table class="table table-bordered table-striped">
         <thead>
         <tr>
-            <th>Tasks</th>
             <th>Id</th>
             <th>Title</th>
             <th>Description</th>
             <th>Completed</th>
             <th>Creation Date</th>
             <th>Completion Date</th>
+            <th>Tasks</th>
         </tr>
         </thead>
         <tbody>
         <tr th:each="item, row : ${todoItems}" th:class="${row.odd} ? 'odd-row' : 'even-row'">
-            <td>
-                <div class="btn btn-group-sm" role="group">
-                    <a class="btn btn-info" th:href="@{/edit/{id}(id=${item.id})}">Edit</a>
-                    <a class="btn btn-danger" th:href="@{/delete/{id}(id=${item.id})}">Delete</a>
-                    <a class="btn btn-success" th:href="@{/complete/{id}(id=${item.id})}">Complete</a>
-                </div>
-            </td>
             <td th:text="${item.id}">item_id</td>
             <td th:text="${item.title}">item_description</td>
             <td th:text="${item.description}">item_description</td>
             <td th:text="${item.complete}">item_complete</td>
             <td th:text="${item.creationTimeStamp}">item_created_date</td>
             <td th:text="${item.completionTimeStamp}">item_modified_date</td>
+            <td>
+                <div class="btn-group" role="group">
+                    <a class="btn btn-info btn-sm mr-1" th:href="@{/edit/{id}(id=${item.id})}">Edit</a>
+                    <form th:action="@{/delete/{id}(id=${item.id})}" method="post" class="d-inline">
+                        <button type="submit" class="btn btn-danger btn-sm">Delete</button>
+                    </form>
+                    <form th:action="@{/complete/{id}(id=${item.id})}" method="post" class="d-inline">
+                        <button type="submit" class="btn btn-success btn-sm">Complete</button>
+                    </form>
+                </div>
+            </td>
         </tr>
         </tbody>
     </table>

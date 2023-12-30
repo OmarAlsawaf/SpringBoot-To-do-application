@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link th:rel="stylesheet" th:href="@{/webjars/bootstrap/3.4.1/css/bootstrap.min.css} " />
+
+    <!-- Custom dark mode styles -->
+    <style>
+        body {
+            background-color: #222;
+            color: #fff;
+        }
+
+        .container {
+            background-color: #333;
+            padding: 20px;
+            border-radius: 5px;
+            margin-top: 20px;
+        }
+
+        h1 {
+            color: #fff;
+        }
+
+        table {
+            color: #fff;
+        }
+
+        /* Customizing table colors */
+        th,
+        td {
+            border: 1px solid #444;
+            background-color: #444; /* Set the background color for all rows */
+        }
+
+        /* Styling buttons */
+        .btn {
+            color: #fff;
+        }
+
+        /* Styling links */
+        a {
+            color: #00ffcc;
+        }
+
+        /* Dark mode for Bootstrap alerts */
+        .alert {
+            background-color: #444;
+            border-color: #333;
+            color: #fff;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <div class="col-md-6">
+        <form action="#" th:action="@{/todo/{id}(id=${todo.id})}" th:object="${todo}" method="POST">
+            <div class="form-group">
+                <label for="title">Title</label>
+                <input class="form-control" type="text" th:field="*{title}" id="title"
+                       placeholder="*{title}">
+                <span th:if="${#fields.hasErrors('title')}" th:errors="*{title}"></span>
+            </div>
+
+            <div class="form-group">
+                <label for="description">Description</label>
+                <input class="form-control" type="text" th:field="*{description}" id="description"
+                       th:attr="placeholder=${todo.description}">
+                <span th:if="${#fields.hasErrors('description')}" th:errors="*{description}"></span>
+            </div>
+
+            <div class="checkbox">
+                <label>
+                    <input type="checkbox" th:checked="${complete} == true" th:field="*{complete}" id="complete" />
+                    Complete
+                </label>
+            </div>
+
+            <button class="btn btn-default" type="submit">Update</button>
+
+            <input type="hidden" th:field="*{creationTimeStamp}" />
+            <input type="hidden" th:field="*{completionTimeStamp}" />
+        </form>
+    </div>
+</div>
+</body>
+</html>
